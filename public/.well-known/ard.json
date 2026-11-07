@@ -1,0 +1,28 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Ali Labs",
+    "documentationUrl": "https://alilabs.org/"
+  },
+  "entries": [
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:alilabs.org:server:prompt-library",
+      "displayName": "Ali Labs Prompt Library",
+      "type": "application/mcp-server-card+json",
+      "url": "https://prompts.alilabs.org/.well-known/mcp/server-card.json",
+      "description": "MCP server exposing reusable prompts for agile teams working with AI agents: sprint retrospectives, user story refinement and deciding what to delegate to AI.",
+      "capabilities": ["sprint-retrospective", "user-story-refiner", "ai-delegation-check"],
+      "tags": ["prompts", "agile", "scrum", "ai-agents", "retrospective", "backlog"],
+      "version": "1.0.0",
+      "updatedAt": "2026-11-07T00:00:00Z",
+      "representativeQueries": [
+        "run a sprint retrospective from my team's notes",
+        "turn this backlog item into a user story with acceptance criteria",
+        "should this team task be handed to an AI agent or a person",
+        "agile coaching prompts for scrum teams",
+        "prompt templates for teams adopting agentic AI"
+      ]
+    }
+  ]
+}
