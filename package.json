@@ -1,0 +1,19 @@
+{
+  "name": "alilabs-prompts-mcp",
+  "version": "1.0.0",
+  "description": "Ali Labs prompt library served as an MCP server",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "express": "^5.3.0",
+    "gray-matter": "^4.0.3",
+    "zod": "^4.6.7"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  }
+}
