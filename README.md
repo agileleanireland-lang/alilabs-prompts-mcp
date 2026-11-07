@@ -1,25 +1,51 @@
 # Ali Labs Prompt Library — MCP server
 
-Serves every Markdown file in `prompts/` as an MCP prompt, so any MCP client
-(Claude, Cursor, VS Code, ChatGPT connectors, etc.) can list and use your prompts.
-It also serves the discovery files that ARD registries and Lighthouse look for.
+The ALI Labs prompt builders from alilabs.org, served as MCP prompts so any MCP
+client (Claude, Cursor, VS Code and others) can use them directly.
+
+Live at **https://alilabs-prompts-mcp.onrender.com/mcp** (Streamable HTTP).
+
+## Prompts
+
+| Prompt | From | Main choices |
+| --- | --- | --- |
+| `career-intelligence` | [alilabs.org/career-intelligence](https://alilabs.org/career-intelligence/) | `goal`: jobs, full, apply, evidence, change, ai — plus role, location, experience and more |
+| `job-application-helper` | [alilabs.org/ai-job-application-helper](https://alilabs.org/ai-job-application-helper/) | `job_advert` and `cv` (required); `mode`: full, tailor, review, letter, form |
+| `job-application-save-progress` | same page | none — asks for a summary to carry into the next chat |
+| `small-business-ai-helper` | [alilabs.org/ai-for-small-business-ireland](https://alilabs.org/ai-for-small-business-ireland/) | `business_type` (9 types) × `goal` (7 goals); `version`: full or quick |
+
+Each prompt is built exactly as the web page builds it, from the same templates.
+
+## Files
 
 ```
-server.js                               the MCP server (Streamable HTTP at /mcp)
-prompts/*.md                            one file per prompt — edit or add these
-public/.well-known/mcp/server-card.json MCP server card (what the ARD entry points to)
+server.js                               the MCP server
+tools.js                                the build logic for the four prompts above
+data/alilabs-tools.json                 the templates, copied from the alilabs.org pages
+prompts/*.md                            optional extra prompts (see below)
+public/.well-known/mcp/server-card.json MCP server card
 public/.well-known/ard.json             ARD manifest
 ```
 
-## 1. Add your prompts
+## Keeping it in sync with the website
 
-Copy one of the sample files in `prompts/` and edit it:
+The templates in `data/alilabs-tools.json` are a copy taken on 7 November 2026.
+If you change the wording on one of the pages, update the matching section of that
+file (`career`, `job` or `smb`) — or ask Claude to re-extract it — then redeploy.
+
+**Redeploying:** this Render service is linked to the public repo URL, which does
+not redeploy automatically. After committing, open the service in Render and click
+**Manual Deploy → Deploy latest commit**.
+
+## Adding a simple prompt
+
+Drop a Markdown file into `prompts/`:
 
 ```markdown
 ---
-name: my-prompt-name          # lowercase-with-dashes, unique
+name: my-prompt-name
 title: My Prompt Name
-description: One sentence on what it does — clients show this.
+description: One sentence on what it does.
 arguments:
   - name: topic
     description: What the user fills in
@@ -28,53 +54,18 @@ arguments:
 The prompt text. Use {{topic}} wherever the argument should go.
 ```
 
-No restart logic needed — files are read on every request.
+Then add its name to `capabilities` in `public/.well-known/ard.json`.
 
-The three included prompts (`sprint-retrospective`, `user-story-refiner`,
-`ai-delegation-check`) are samples. Delete them once yours are in.
+## Discovery (ARD)
 
-## 2. Run it locally
+alilabs.org points to `ard.json` with a `<link rel="ard">` tag, added by the
+"ARD discovery link (prompt library)" snippet in Code Snippets. After changing
+prompts, update `capabilities`, `representativeQueries`, `version` and
+`updatedAt` in `ard.json`.
+
+## Run locally
 
 ```bash
 npm install
 npm start            # http://localhost:3000/mcp
 ```
-
-Quick check with the MCP Inspector: `npx @modelcontextprotocol/inspector`,
-choose "Streamable HTTP", URL `http://localhost:3000/mcp`.
-
-## 3. Deploy it
-
-Any Node 18+ host works (Render, Railway, Fly.io, a VPS). Point a subdomain at it —
-the files assume **https://prompts.alilabs.org**. If you use a different address,
-change it in both `.well-known` files.
-
-After deploying, these should load:
-- https://prompts.alilabs.org/mcp (POST only — a browser GET returns 405, which is correct)
-- https://prompts.alilabs.org/.well-known/mcp/server-card.json
-- https://prompts.alilabs.org/.well-known/ard.json
-
-## 4. Publish ard.json on alilabs.org (this is what Lighthouse audits)
-
-Lighthouse checks the site you audited, so the manifest also has to be reachable
-from **alilabs.org**. alilabs.org runs WordPress, so pick one:
-
-**Option A — upload the file (simplest).** Upload `public/.well-known/ard.json` to
-`/.well-known/ard.json` in the WordPress root via your host's file manager or SFTP.
-Many hosts already have a `.well-known` folder there (used for SSL certificates).
-
-**Option B — link tag, no file upload.** Add this to the site `<head>` (theme
-header, or a plugin like WPCode / Insert Headers and Footers):
-
-```html
-<link rel="ard" href="https://prompts.alilabs.org/.well-known/ard.json">
-```
-
-Then re-run Lighthouse. Each entry already has 5 `representativeQueries`, which is
-what the audit wants for a full score.
-
-## When you add or rename prompts
-
-Update `capabilities` (the prompt names) and, if the library's scope changes,
-`representativeQueries` and `description` in `ard.json`. Bump `version` and
-`updatedAt` in `ard.json` and `version` in `server-card.json` and `server.js`.
