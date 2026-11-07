@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  "name": "org.alilabs.prompts/mcp",
+  "version": "1.0.0",
+  "title": "Ali Labs Prompt Library",
+  "description": "Reusable prompts for agile teams working with AI agents: retrospectives, story refinement and AI delegation decisions.",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://prompts.alilabs.org/mcp"
+    }
+  ]
+}
