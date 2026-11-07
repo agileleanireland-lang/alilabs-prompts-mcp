@@ -10,7 +10,7 @@
       "identifier": "urn:air:alilabs.org:server:prompt-library",
       "displayName": "Ali Labs Prompt Library",
       "type": "application/mcp-server-card+json",
-      "url": "https://prompts.alilabs.org/.well-known/mcp/server-card.json",
+      "url": "https://alilabs-prompts-mcp.onrender.com/.well-known/mcp/server-card.json",
       "description": "MCP server exposing reusable prompts for agile teams working with AI agents: sprint retrospectives, user story refinement and deciding what to delegate to AI.",
       "capabilities": ["sprint-retrospective", "user-story-refiner", "ai-delegation-check"],
       "tags": ["prompts", "agile", "scrum", "ai-agents", "retrospective", "backlog"],
