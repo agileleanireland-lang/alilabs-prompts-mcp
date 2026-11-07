@@ -11,17 +11,32 @@
       "displayName": "Ali Labs Prompt Library",
       "type": "application/mcp-server-card+json",
       "url": "https://alilabs-prompts-mcp.onrender.com/.well-known/mcp/server-card.json",
-      "description": "MCP server exposing reusable prompts for agile teams working with AI agents: sprint retrospectives, user story refinement and deciding what to delegate to AI.",
-      "capabilities": ["sprint-retrospective", "user-story-refiner", "ai-delegation-check"],
-      "tags": ["prompts", "agile", "scrum", "ai-agents", "retrospective", "backlog"],
-      "version": "1.0.0",
+      "description": "MCP server for the ALI Labs prompt builders: Career Intelligence for Agile professionals job-hunting in Ireland, the AI Job Application Helper for honest CV, cover letter and application form help, and ready-made AI prompts for Irish small businesses by business type and goal.",
+      "capabilities": [
+        "career-intelligence",
+        "job-application-helper",
+        "job-application-save-progress",
+        "small-business-ai-helper"
+      ],
+      "tags": [
+        "prompts",
+        "careers",
+        "job-search",
+        "cv",
+        "cover-letter",
+        "ireland",
+        "agile",
+        "small-business",
+        "ai-adoption"
+      ],
+      "version": "1.1.0",
       "updatedAt": "2026-11-07T00:00:00Z",
       "representativeQueries": [
-        "run a sprint retrospective from my team's notes",
-        "turn this backlog item into a user story with acceptance criteria",
-        "should this team task be handed to an AI agent or a person",
-        "agile coaching prompts for scrum teams",
-        "prompt templates for teams adopting agentic AI"
+        "find Scrum Master or Agile Coach jobs in Ireland I can apply for now",
+        "help me tailor my CV and cover letter to this job advert",
+        "honest assessment of whether I am a good fit for this job",
+        "AI prompts for a small business in Ireland to save time on admin",
+        "how can my Irish shop or trades business use AI for marketing and customer enquiries"
       ]
     }
   ]
