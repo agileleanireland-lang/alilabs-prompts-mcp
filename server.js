@@ -10,17 +10,19 @@ import matter from "gray-matter";
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { TOOL_PROMPTS } from "./tools.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = path.join(__dirname, "prompts");
 const PUBLIC_DIR = path.join(__dirname, "public");
 const PORT = process.env.PORT || 3000;
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 
 // ---- Load prompts -------------------------------------------------------
 // Each file: YAML front matter (name, title, description, arguments) + body.
 // Use {{argument_name}} in the body; it is filled in when a client asks for the prompt.
 function loadPrompts() {
+  if (!fs.existsSync(PROMPTS_DIR)) return [];
   return fs
     .readdirSync(PROMPTS_DIR)
     .filter((f) => f.endsWith(".md"))
@@ -59,6 +61,17 @@ function buildServer(prompts) {
       })
     );
   }
+  // The three prompt builders from alilabs.org (see tools.js)
+  for (const t of TOOL_PROMPTS) {
+    server.registerPrompt(
+      t.name,
+      { title: t.title, description: t.description, argsSchema: t.args },
+      (args = {}) => ({
+        description: t.description,
+        messages: [{ role: "user", content: { type: "text", text: t.build(args) } }],
+      })
+    );
+  }
   return server;
 }
 
@@ -94,7 +107,7 @@ app.delete("/mcp", notAllowed);
 app.use("/.well-known", express.static(path.join(PUBLIC_DIR, ".well-known"), { dotfiles: "allow" }));
 
 app.get("/", (_req, res) =>
-  res.json({ name: "Ali Labs Prompt Library", mcp: "/mcp", prompts: loadPrompts().map((p) => p.name) })
+  res.json({ name: "Ali Labs Prompt Library", mcp: "/mcp", prompts: [...TOOL_PROMPTS.map((t) => t.name), ...loadPrompts().map((p) => p.name)] })
 );
 
 app.listen(PORT, () => console.log(`Prompt library MCP server on http://localhost:${PORT}/mcp`));
